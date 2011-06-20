@@ -12,7 +12,7 @@ public class CaladroidActivity extends Activity {
     	this.setContentView(R.layout.main);
     	//Intent upcoming = new Intent(CaladroidActivity.this, UpcomingActivity.class);
     	//this.startActivity(upcoming);
-    	RequestTask tr = new RequestTask();
+    	LoadEvents tr = new LoadEvents();
     	tr.mContext = CaladroidActivity.this;
         tr.execute();
     }
