@@ -5,8 +5,7 @@
     android:layout_height="fill_parent"
     >
 <TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
+    android:text="Loading Events"
+    android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_horizontal"/>
+<ProgressBar android:id="@+id/progressBar1" style="?android:attr/progressBarStyleLarge" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_horizontal"></ProgressBar>
 </LinearLayout>

@@ -11,17 +11,30 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 public class RequestTask extends AsyncTask<String, String, String> {
+	public String responseString;
+	public Context mContext;
+
+
+	protected void onPostExecute(String result) {
+		Intent i = new Intent(mContext,UpcomingActivity.class);
+		UpcomingActivity.responseString = result;
+		mContext.startActivity(i);
+
+	}
 
 	@Override
-	protected String doInBackground(String... uri) {
+	protected String doInBackground(String... params) {
+
+		String uri = "http://calagator.org/events.json";
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpResponse response;
-		String responseString = null;
 		try {
-			response = httpclient.execute(new HttpGet(uri[0]));
+			response = httpclient.execute(new HttpGet(uri));
 			StatusLine statusLine = response.getStatusLine();
 			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -38,13 +51,9 @@ public class RequestTask extends AsyncTask<String, String, String> {
 		} catch (IOException e) {
 			//TODO Handle problems..
 		}
+
 		return responseString;
 	}
-
-	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
-		//Do anything with response..
-	}
 }
+
 
