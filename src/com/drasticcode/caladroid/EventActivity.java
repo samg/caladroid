@@ -1,14 +1,11 @@
 package com.drasticcode.caladroid;
 
-import java.text.ParseException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.maps.MapView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -31,6 +28,11 @@ public class EventActivity extends Activity {
 
         TextView event_when = (TextView) findViewById(R.id.event_when);
         event_when.setText(event.when());
+        
+        TextView venue_title = (TextView) findViewById(R.id.venue_title);
+        venue_title.setText(event.venue.title());
+
+        //MapView venue_map = (MapView) findViewById(R.id.venue_map);
         
         TextView event_website = (TextView) findViewById(R.id.event_website);
         event_website.setText(event.website());

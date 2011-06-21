@@ -21,8 +21,8 @@ public class Event {
 			website = json.get("website").getAsString();
 		}
 		description = json.get("description").getAsString();
-
-		// venue = json.getAsJsonObject("venue").get("title").getAsString();
+		JsonObject v = json.getAsJsonObject("venue");
+		venue = new Venue(v);
 	}
 
 	public String title() {
@@ -79,8 +79,33 @@ public class Event {
 	}
 
 	public class Venue {
+		private String title, address, description;
+		private int latitude, longitude;
+		
+		
 		public Venue(JsonObject json){
-			json.getAsJsonObject("venue");
+			if (json.has("title")) {
+				title = json.get("title").getAsString();
+			}
+//			if (json.has("address")) {
+//				address = json.get("address").getAsString();
+//			}
+//			if (json.has("description")) {
+//				description = json.get("description").getAsString();
+//			}
+//			if (json.has("latitude")) {
+//				latitude = json.get("latitude").getAsInt();
+//			}
+//			if ( json.has("longitude") ){
+//				longitude = json.get("longitude").getAsInt();
+//			}
+			
 		}
+
+
+		public String title() {
+			return title;
+		}
+
 	}
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.drasticcode.caladroid.Event.Venue;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,13 +28,15 @@ public class UpcomingActivity extends ListActivity {
 		for(JsonElement e : events){
 			Event event = new Event((JsonObject) e);
 
-			String text = event.title().concat("\n").concat(event.when()).concat("\n");
+			Venue venue = event.venue;
+			String text = event.title().concat("\n").concat(event.when()).concat("\n").concat(venue.title());
 			names.add(text);
 		}
 		
 		
 		// Create an ArrayAdapter, that will actually make the Strings above
 		// appear in the ListView
+		setContentView(R.layout.upcoming);
 		this.setListAdapter(new ArrayAdapter<String>(this,
 				R.layout.list_item, names));
 	}
