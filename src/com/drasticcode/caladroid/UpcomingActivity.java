@@ -28,7 +28,7 @@ public class UpcomingActivity extends ListActivity {
 		for(JsonElement e : events){
 			Event event = new Event((JsonObject) e);
 
-			Venue venue = event.venue;
+			Venue venue = event.getVenue();
 			String text = event.title().concat("\n").concat(event.when()).concat("\n").concat(venue.title());
 			names.add(text);
 		}
@@ -44,7 +44,7 @@ public class UpcomingActivity extends ListActivity {
 	protected void onListItemClick (ListView l, View v, int position, long id){
 		JsonElement event = UpcomingActivity.events.get(position);
 		
-		Intent i = new Intent(UpcomingActivity.this,EventActivity.class);
+		Intent i = new Intent(UpcomingActivity.this, EventActivity.class);
 		i.putExtra("event_index", position);
 		startActivity(i);
 	}

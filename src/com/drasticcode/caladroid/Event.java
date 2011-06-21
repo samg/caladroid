@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 public class Event {
 	private String title, website, description;
 	public Date start, end;
-	public Venue venue;
+	private Venue venue;
 	public Event(JsonObject json) {
 
 		title = json.get("title").getAsString();
@@ -22,7 +22,7 @@ public class Event {
 		}
 		description = json.get("description").getAsString();
 		JsonObject v = json.getAsJsonObject("venue");
-		venue = new Venue(v);
+		setVenue(new Venue(v));
 	}
 
 	public String title() {
@@ -78,33 +78,53 @@ public class Event {
 				+ formattedEndTime();
 	}
 
+	public void setVenue(Venue venue) {
+		this.venue = venue;
+	}
+
+	public Venue getVenue() {
+		return venue;
+	}
+
 	public class Venue {
 		private String title, address, description;
-		private int latitude, longitude;
+		private double latitude, longitude;
 		
 		
 		public Venue(JsonObject json){
+			if (json.has("address")) {
+				address = json.get("address").toString();
+			}
 			if (json.has("title")) {
 				title = json.get("title").getAsString();
 			}
-//			if (json.has("address")) {
-//				address = json.get("address").getAsString();
-//			}
 //			if (json.has("description")) {
 //				description = json.get("description").getAsString();
 //			}
-//			if (json.has("latitude")) {
-//				latitude = json.get("latitude").getAsInt();
-//			}
-//			if ( json.has("longitude") ){
-//				longitude = json.get("longitude").getAsInt();
-//			}
+			System.out.println(json.toString());
+			if (json.has("latitude") && !json.get("latitude").isJsonNull()) {
+				latitude = json.get("latitude").getAsDouble();
+			}
+			if ( json.has("longitude") && !json.get("longitude").isJsonNull()){
+				longitude = json.get("longitude").getAsDouble();
+			}
 			
 		}
 
 
 		public String title() {
 			return title;
+		}
+
+
+		public double getLatitude() {
+			return latitude;
+		}
+
+
+
+		public double getLongitude() {
+			return longitude;
 		}
 
 	}

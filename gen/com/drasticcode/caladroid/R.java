@@ -14,12 +14,14 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int ScrollView01=0x7f050000;
-        public static final int event_description=0x7f050005;
+        public static final int ScrollView01=0x7f050005;
+        public static final int event_description=0x7f050007;
         public static final int event_title=0x7f050001;
-        public static final int event_website=0x7f050004;
+        public static final int event_website=0x7f050006;
         public static final int event_when=0x7f050002;
-        public static final int progressBar1=0x7f050006;
+        public static final int mainlayout=0x7f050000;
+        public static final int progressBar1=0x7f050008;
+        public static final int venue_map=0x7f050004;
         public static final int venue_title=0x7f050003;
     }
     public static final class layout {
