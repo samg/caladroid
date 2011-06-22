@@ -101,7 +101,6 @@ public class Event {
 //			if (json.has("description")) {
 //				description = json.get("description").getAsString();
 //			}
-			System.out.println(json.toString());
 			if (json.has("latitude") && !json.get("latitude").isJsonNull()) {
 				latitude = json.get("latitude").getAsDouble();
 			}

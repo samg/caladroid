@@ -29,7 +29,7 @@ public class EventActivity extends MapActivity {
 
 		Intent i = getIntent();
 		int position = i.getIntExtra("event_index", -1);
-		JsonArray events = UpcomingActivity.events ;
+		JsonArray events = UpcomingActivity.events;
 		JsonObject json = (JsonObject) events.get(position);
 		Event event = new Event(json);
 		Venue venue = event.getVenue();
@@ -41,22 +41,20 @@ public class EventActivity extends MapActivity {
 
 		double latitude = venue.getLatitude() * 1E6;
 		double longitude = venue.getLongitude() * 1E6;
-		System.out.println(venue.getLatitude());
-		System.out.println(latitude);
+
 		int lat = (int) latitude;
 		int lng = (int) longitude;
-		System.out.println(lat);
 
-		System.out.println(latitude);
 		geoPoint = new GeoPoint(lat, lng);
 		mapController.setCenter(geoPoint);
 		mapController.setZoom(18);
-		Drawable marker=getResources().getDrawable(android.R.drawable.arrow_down_float);
-		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+		Drawable marker = getResources().getDrawable(
+				android.R.drawable.arrow_down_float);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
+				marker.getIntrinsicHeight());
 		mapView.getOverlays().add(new InterestingLocations(marker, geoPoint));
-		//		Toast.makeText(this, e.when(), Toast.LENGTH_LONG)
-		//		.show();
-
+		// Toast.makeText(this, e.when(), Toast.LENGTH_LONG)
+		// .show();
 
 		TextView event_title = (TextView) findViewById(R.id.event_title);
 		event_title.setText(event.title());
@@ -67,7 +65,7 @@ public class EventActivity extends MapActivity {
 		TextView venue_title = (TextView) findViewById(R.id.venue_title);
 		venue_title.setText(event.getVenue().title());
 
-		//MapView venue_map = (MapView) findViewById(R.id.venue_map);
+		// MapView venue_map = (MapView) findViewById(R.id.venue_map);
 
 		TextView event_website = (TextView) findViewById(R.id.event_website);
 		event_website.setText(event.website());
@@ -81,19 +79,19 @@ public class EventActivity extends MapActivity {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	class InterestingLocations extends ItemizedOverlay<OverlayItem>{
+
+	class InterestingLocations extends ItemizedOverlay<OverlayItem> {
 
 		private List<OverlayItem> locations = new ArrayList<OverlayItem>();
 		private Drawable marker;
 
-		public InterestingLocations(Drawable defaultMarker, GeoPoint geoPoint){
+		public InterestingLocations(Drawable defaultMarker, GeoPoint geoPoint) {
 			super(defaultMarker);
 			// TODO Auto-generated constructor stub
 			// create locations of interest
 			locations.add(new OverlayItem(geoPoint, "My Place", "My Place"));
 			populate();
 		}
-
 
 		@Override
 		protected OverlayItem createItem(int i) {
@@ -104,12 +102,12 @@ public class EventActivity extends MapActivity {
 		public int size() {
 			return locations.size();
 		}
+
 		@Override
-		public void draw(Canvas canvas, MapView mapView, 
-				boolean shadow) {
+		public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 			super.draw(canvas, mapView, shadow);
 
-			boundCenterBottom(marker);
+			// boundCenterBottom(marker);
 		}
 	}
 }
