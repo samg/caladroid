@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -17,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -58,9 +58,9 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 				throw new IOException(statusLine.getReasonPhrase());
 			}
 		} catch (ClientProtocolException e) {
-			//TODO Handle problems..
+			Toast.makeText(mContext, "Couldn't load events", Toast.LENGTH_LONG);
 		} catch (IOException e) {
-			//TODO Handle problems..
+			Toast.makeText(mContext, "Couldn't load events", Toast.LENGTH_LONG);
 		}
 		Gson gson = new Gson ();
 		JsonParser parser = new JsonParser();
