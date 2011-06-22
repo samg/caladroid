@@ -74,8 +74,11 @@ public class Event {
 	}
 
 	public String when() {
-		return formattedStartDate() + " from " + formattedStartTime() + "-"
-				+ formattedEndTime();
+		return formattedStartDate() + " from " + formattedDuration();
+	}
+	
+	public String formattedDuration(){
+		return formattedStartTime() + "-" + formattedEndTime();
 	}
 
 	public void setVenue(Venue venue) {

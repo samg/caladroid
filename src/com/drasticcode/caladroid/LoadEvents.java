@@ -58,8 +58,10 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 				throw new IOException(statusLine.getReasonPhrase());
 			}
 		} catch (ClientProtocolException e) {
+			// FIXME: These need to run on UI thread
 			Toast.makeText(mContext, "Couldn't load events", Toast.LENGTH_LONG);
 		} catch (IOException e) {
+			// FIXME: These need to run on UI thread
 			Toast.makeText(mContext, "Couldn't load events", Toast.LENGTH_LONG);
 		}
 		Gson gson = new Gson ();
