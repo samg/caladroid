@@ -58,19 +58,27 @@ public class Event {
 		String str = writer.format(start);
 		return str;
 	}
+	
+	public String formattedEndDate() {
+		// Monday, June 20, 2011 from 9am–7pm
+		SimpleDateFormat writer = new SimpleDateFormat(
+				"EEEEEEEEEEE, MMMMMMMMMMMMMM d, yyyy");
+		String str = writer.format(end);
+		return str;
+	}
 
 	public String formattedStartTime() {
 		// Monday, June 20, 2011 from 9am–7pm
 		SimpleDateFormat writer = new SimpleDateFormat("ha");
 		String str = writer.format(start);
-		return str;
+		return str.toLowerCase();
 	}
 
 	public String formattedEndTime() {
 		// Monday, June 20, 2011 from 9am–7pm
 		SimpleDateFormat writer = new SimpleDateFormat("ha");
 		String str = writer.format(end);
-		return str;
+		return str.toLowerCase();
 	}
 
 	public String when() {
@@ -78,6 +86,9 @@ public class Event {
 	}
 	
 	public String formattedDuration(){
+		if (!formattedStartDate().equals(formattedEndDate())){
+			return formattedStartTime() + " through " + formattedEndDate() + " at " + formattedEndTime();
+		}
 		return formattedStartTime() + "-" + formattedEndTime();
 	}
 

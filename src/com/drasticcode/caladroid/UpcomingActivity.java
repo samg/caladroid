@@ -53,21 +53,21 @@ public class UpcomingActivity extends Activity {
 			Venue venue = event.getVenue();
 			date = event.start;
 			
-			today.add(createItem(event.title(), venue.title().concat("\n").concat(event.formattedDuration())));
 			if (counter > 0){
 				if (! day.format(date).equals( day.format(last_date) ) ) {
 					
-					adapter.addSection(day.format(date), new SimpleAdapter(this, today, R.layout.list_complex,
+					adapter.addSection(day.format(last_date), new SimpleAdapter(this, today, R.layout.list_complex,
 							new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[] { R.id.list_complex_title, R.id.list_complex_caption }));
 					today = new LinkedList<Map<String,?>>();
 					offset++;
 				}
 			}
+			today.add(createItem(event.title(), venue.title().concat("\n").concat(event.formattedDuration())));
+			events_indexes.put(offset, counter);
 			last_date = date;
 			counter++;
 			offset++;
 			
-			events_indexes.put(offset, counter);
 		}
 
 		ListView list = new ListView(this);
