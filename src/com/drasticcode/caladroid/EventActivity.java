@@ -1,9 +1,12 @@
 package com.drasticcode.caladroid;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,10 +15,15 @@ import android.widget.TextView;
 
 import com.drasticcode.caladroid.Event.Venue;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class EventActivity extends Activity {
+public class EventActivity extends MapActivity {
 	LinearLayout linearLayout;
 	private GeoPoint geoPoint;
 	private double lat;
@@ -50,8 +58,24 @@ public class EventActivity extends Activity {
 		lat= venue.getLatitude();
 		lng = venue.getLongitude();
 
-		// Toast.makeText(this, e.when(), Toast.LENGTH_LONG)
-		// .show();
+		MapView mapView = (MapView) findViewById(R.id.venue_map);
+		mapView.setBuiltInZoomControls(true);
+		MapController mapController = mapView.getController();
+
+		double latitude = venue.getLatitude() * 1E6;
+		double longitude = venue.getLongitude() * 1E6;
+
+		int lat = (int) latitude;
+		int lng = (int) longitude;
+
+		geoPoint = new GeoPoint(lat, lng);
+		mapController.setCenter(geoPoint);
+		mapController.setZoom(16);
+		Drawable marker = getResources().getDrawable(
+				R.drawable.marker);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
+				marker.getIntrinsicHeight());
+		mapView.getOverlays().add(new InterestingLocations(marker, geoPoint));
 
 		TextView event_title = (TextView) findViewById(R.id.event_title);
 		event_title.setText(event.title());
@@ -79,4 +103,41 @@ public class EventActivity extends Activity {
 		event_description.setText(event.description());
 	}
 
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	class InterestingLocations extends ItemizedOverlay<OverlayItem> {
+
+		private List<OverlayItem> locations = new ArrayList<OverlayItem>();
+		private Drawable marker;
+
+		public InterestingLocations(Drawable defaultMarker, GeoPoint geoPoint) {
+			super(defaultMarker);
+			marker = defaultMarker;
+			// TODO Auto-generated constructor stub
+			// create locations of interest
+			locations.add(new OverlayItem(geoPoint, "My Place", "My Place"));
+			populate();
+		}
+
+		@Override
+		protected OverlayItem createItem(int i) {
+			return locations.get(i);
+		}
+
+		@Override
+		public int size() {
+			return locations.size();
+		}
+
+		@Override
+		public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+			super.draw(canvas, mapView, shadow);
+
+			boundCenterBottom(marker);
+		}
+	}
 }
