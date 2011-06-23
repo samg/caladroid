@@ -103,25 +103,51 @@ public class Event {
 	public class Venue {
 		private String title, address, description;
 		private double latitude, longitude;
+		private boolean wifi;
+		private String street_address;
+		private String locality;
+		private String postal_code;
+		private String country;
+		private String region;
+		private JsonObject json;
 		
 		
 		public Venue(JsonObject json){
-			if (json.has("address")) {
-				address = json.get("address").toString();
-			}
-			if (json.has("title")) {
-				title = json.get("title").getAsString();
-			}
-//			if (json.has("description")) {
-//				description = json.get("description").getAsString();
-//			}
-			if (json.has("latitude") && !json.get("latitude").isJsonNull()) {
-				latitude = json.get("latitude").getAsDouble();
-			}
-			if ( json.has("longitude") && !json.get("longitude").isJsonNull()){
-				longitude = json.get("longitude").getAsDouble();
-			}
+			this.json = json;
+			address = getStringAttribute("address");
+			title = getStringAttribute("title");
+			street_address = getStringAttribute("street_address");
+			locality = getStringAttribute("locality");
+			country = getStringAttribute("country");
+			postal_code = getStringAttribute("postal_code");
+			region = getStringAttribute("region");
+			description = getStringAttribute("description");
+			wifi = getBooleanAttribute("wifi");
+			latitude = getDoubleAttribute("latitude");
+			longitude = getDoubleAttribute("longitude");
 			
+		}
+
+
+		private String getStringAttribute(String string) {
+			if (json.has(string)&& !json.get(string).isJsonNull()) {
+				return json.get(string).getAsString();
+			}
+			return "";
+		}
+		
+		private Boolean getBooleanAttribute(String string) {
+			if (json.has(string)&& !json.get(string).isJsonNull()) {
+				return json.get(string).getAsBoolean();
+			}
+			return false;
+		}
+		
+		private Double getDoubleAttribute(String string) {
+			if (json.has(string)&& !json.get(string).isJsonNull()) {
+				return json.get(string).getAsDouble();
+			}
+			return -1.0;
 		}
 
 
@@ -140,5 +166,29 @@ public class Event {
 			return longitude;
 		}
 
+
+		public void setWifi(boolean wifi) {
+			this.wifi = wifi;
+		}
+
+
+		public boolean isWifi() {
+			return wifi;
+		}
+
+
+		public void setAddress(String address) {
+			this.address = address;
+		}
+
+
+		public String getAddress() {
+			return address;
+		}
+		
+		public String address(){
+			return street_address + ", " + locality + ", " + region + " " + postal_code + ", " + country;
+		}
+		
 	}
 }
