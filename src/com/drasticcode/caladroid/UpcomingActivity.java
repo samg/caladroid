@@ -1,6 +1,7 @@
 package com.drasticcode.caladroid;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ public class UpcomingActivity extends Activity {
 	private static final String ITEM_CAPTION = "caption";
 	static public JsonArray events;
 	static public HashMap<Integer, Integer> events_indexes;
+	private	SimpleDateFormat dateFormat = new SimpleDateFormat("EEEEEEEEEEE, MMMMMMMMMMMMMM d, yyyy"); 
 
 	public Map<String,?> createItem(String title, String caption) {
 		Map<String,String> item = new HashMap<String,String>();
@@ -38,33 +40,29 @@ public class UpcomingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		events_indexes = new HashMap<Integer,Integer>();
 		
-
-
-		Date last_date = new Date(1970, 1, 1);
-		Date date = null;
-		SimpleDateFormat day = new SimpleDateFormat("EEEEEEEEEEE, MMMMMMMMMMMMMM d, yyyy"); 
+		Date lastDate = new Date(1970, 1, 1);
+		Date eventStart = null;
 		SeparatedListAdapter adapter = new SeparatedListAdapter(this);
-		List<Map<String,?>> today = new LinkedList<Map<String,?>>();
+		List<Map<String,?>> dayList = new LinkedList<Map<String,?>>();
 		int counter = 0;
 		int offset = 1;
 		events_indexes.put(offset, counter);
 		for(JsonElement e : events){
 			Event event = new Event((JsonObject) e);
 			Venue venue = event.getVenue();
-			date = event.start;
+			eventStart = event.start;
 			
 			if (counter > 0){
-				if (! day.format(date).equals( day.format(last_date) ) ) {
-					
-					adapter.addSection(day.format(last_date), new SimpleAdapter(this, today, R.layout.list_complex,
+				if (! dateFormat.format(eventStart).equals( dateFormat.format(lastDate) ) ) {
+					adapter.addSection(sectionLabel(lastDate), new SimpleAdapter(this, dayList, R.layout.list_complex,
 							new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[] { R.id.list_complex_title, R.id.list_complex_caption }));
-					today = new LinkedList<Map<String,?>>();
+					dayList = new LinkedList<Map<String,?>>();
 					offset++;
 				}
 			}
-			today.add(createItem(event.title(), venue.title().concat("\n").concat(event.formattedDuration())));
+			dayList.add(createItem(event.title(), venue.title().concat("\n").concat(event.formattedDuration())));
 			events_indexes.put(offset, counter);
-			last_date = date;
+			lastDate = eventStart;
 			counter++;
 			offset++;
 			
@@ -78,6 +76,26 @@ public class UpcomingActivity extends Activity {
 
 //		setContentView(R.layout.upcoming);
 //		this.setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, names));
+	}
+
+	private String sectionLabel(Date lastDate) {
+		String formattedDate = dateFormat.format(lastDate);
+		Calendar today = Calendar.getInstance();
+		String formattedToday = dateFormat.format(Calendar.getInstance().getTime());
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DATE, 1);
+		String formattedTomorrow = dateFormat.format(tomorrow.getTime());
+
+		if (formattedDate.equals(formattedToday)) {
+			return "Today, " + formattedDate;
+		} else if ( formattedDate.equals(formattedTomorrow)) {
+			return "Tomorrow, " + formattedDate;
+		} else if (lastDate.before(today.getTime())){
+			return "Started " + formattedDate;
+		} else {
+			return formattedDate;
+		}
+
 	}
 
 	class EventClickListener implements OnItemClickListener {
