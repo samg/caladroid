@@ -34,7 +34,7 @@
 						<com.google.android.maps.MapView
 							android:id="@+id/venue_map" android:layout_width="fill_parent"
 							android:layout_height="220px" android:clickable="true"
-							android:apiKey="0P3kWGoTr7YXcrXLc2Wqdz-sM57WSik-Rb6NCaw" />
+							android:apiKey="0P3kWGoTr7YXYMslXKSmX0QAi6HLfYH7de7smEQ" />
 					</LinearLayout>
 					<LinearLayout android:orientation="vertical"
 						android:layout_weight="2" android:layout_gravity="right"
