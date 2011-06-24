@@ -17,8 +17,8 @@ public class Event {
 		title = json.get("title").getAsString();
 		start = parseDate(json.get("start_time").getAsString());
 		end = parseDate(json.get("end_time").getAsString());
-		if ( json.has(website) ) {
-			website = json.get("website").getAsString();
+		if ( json.has("url") ) {
+			website = json.get("url").getAsString();
 		}
 		description = json.get("description").getAsString();
 		JsonObject v = json.getAsJsonObject("venue");

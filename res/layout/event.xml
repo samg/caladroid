@@ -58,7 +58,7 @@
 				</TableRow>
 			</TableLayout>
 			<TextView android:id="@+id/event_website"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" android:autoLink="web" />
+				android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="18sp" android:paddingBottom="5dip" android:paddingTop="3dip" android:autoLink="web" />
 			<TextView android:id="@+id/event_description"
 				android:textSize="18sp" android:layout_width="wrap_content" 
 				android:layout_height="wrap_content" />
