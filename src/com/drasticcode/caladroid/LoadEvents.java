@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,14 +25,14 @@ import com.google.gson.JsonParser;
 
 public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 	public String responseString;
-	public Context mContext;
+	public Activity mContext;
 
 
 	protected void onPostExecute(JsonArray result) {
 
 		Intent i = new Intent(mContext,UpcomingActivity.class);
 		mContext.startActivity(i);
-
+		mContext.finish();
 	}
 
 	@Override
