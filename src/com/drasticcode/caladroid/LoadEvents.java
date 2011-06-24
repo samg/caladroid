@@ -17,6 +17,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,13 +28,18 @@ import com.google.gson.JsonParser;
 public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 	public String responseString;
 	public Activity mContext;
+	public Boolean error = false;
 
 
 	protected void onPostExecute(JsonArray result) {
 
-		Intent i = new Intent(mContext,UpcomingActivity.class);
-		mContext.startActivity(i);
-		mContext.finish();
+		if ( error ) {
+			mContext.setContentView(R.layout.error);
+		} else {
+			Intent i = new Intent(mContext,UpcomingActivity.class);
+			mContext.startActivity(i);
+			mContext.finish();
+		}
 	}
 
 	@Override
@@ -59,11 +66,11 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 				throw new IOException(statusLine.getReasonPhrase());
 			}
 		} catch (ClientProtocolException e) {
-			// FIXME: These need to run on UI thread
-			Toast.makeText(mContext, "Couldn't load events", Toast.LENGTH_LONG);
+			error = true;
+			return null;
 		} catch (IOException e) {
-			// FIXME: These need to run on UI thread
-			Toast.makeText(mContext, "Couldn't load events", Toast.LENGTH_LONG);
+			error = true;
+			return null;
 		}
 		Gson gson = new Gson ();
 		JsonParser parser = new JsonParser();
