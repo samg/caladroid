@@ -9,7 +9,13 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -100,7 +106,13 @@ public class EventActivity extends MapActivity {
 		event_website.setText(event.website());
 
 		TextView event_description = (TextView) findViewById(R.id.event_description);
-		event_description.setText(event.description());
+		
+		String text = event.description().replaceAll("\n", "<br/>");
+		Spanned fromHtml = Html.fromHtml(text);
+		event_description.setText(fromHtml);
+		Linkify.addLinks(event_description, Linkify.ALL);
+
+
 	}
 
 	@Override
