@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
-public class LoadEvents extends AsyncTask<String, String, JsonArray> {
+public class LoadEvents extends AsyncTask<Boolean, String, JsonArray> {
 	public String responseString;
 	public Activity mContext;
 	public Boolean error = false;
@@ -41,17 +41,21 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 		}
 	}
 
-	@Override
-	protected JsonArray doInBackground(String... params) {
+	protected JsonArray doInBackground(Boolean... params) {
+		System.out.println(params);
+		boolean skipCache = false;
+        for (Boolean b : params) {
+        	skipCache = b;
+        }
 
 		Date lastCached = getlastCachedDate();
 		Date today = new Date();
 		
-		System.out.println(dateWriter.format(today));
-		System.out.println(dateWriter.format(lastCached));
-		if ( dateWriter.format(today).equals(dateWriter.format(lastCached))) {
+		if ( !skipCache && dateWriter.format(today).equals(dateWriter.format(lastCached))) {
+			System.out.println("loading from cache");
 			loadEventsFromCache();
 		} else {
+			System.out.println("loading from web");
 			loadEventsFromWeb();
 		}
 

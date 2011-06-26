@@ -11,6 +11,9 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,6 +38,27 @@ public class UpcomingActivity extends Activity {
 		item.put(ITEM_CAPTION, caption);
 		return item;
 	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.upcoming_menu, menu);
+	    return true;
+	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.upcoming_refresh:
+	    	return loadEvents(true);
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
+	private boolean loadEvents(boolean b) {
+		LoadEvents tr = new LoadEvents();
+		tr.mContext = UpcomingActivity.this;
+		tr.execute(b);
+		this.setContentView(R.layout.main);
+		return true;
+	}
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,6 +71,10 @@ public class UpcomingActivity extends Activity {
 		int counter = 0;
 		int offset = 1;
 		events_indexes.put(offset, counter);
+		if(events == null) {
+			loadEvents(false);
+			return;
+		}
 		for(JsonElement e : events){
 			Event event = new Event((JsonObject) e);
 			Venue venue = event.getVenue();
@@ -73,9 +101,6 @@ public class UpcomingActivity extends Activity {
 		list.setOnItemClickListener(listener);
 		list.setAdapter(adapter);
 		this.setContentView(list);
-
-//		setContentView(R.layout.upcoming);
-//		this.setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, names));
 	}
 
 	private String sectionLabel(Date lastDate) {

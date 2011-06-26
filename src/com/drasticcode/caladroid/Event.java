@@ -11,12 +11,14 @@ import com.google.gson.JsonObject;
 public class Event {
 	private String title, website, description;
 	public Date start, end;
+	private int id;
 	private Venue venue;
 	public Event(JsonObject json) {
 
 		title = json.get("title").getAsString();
 		start = parseDate(json.get("start_time").getAsString());
 		end = parseDate(json.get("end_time").getAsString());
+		id = json.get("id").getAsInt();
 		if ( json.has("url") ) {
 			website = json.get("url").getAsString();
 		}
@@ -190,5 +192,9 @@ public class Event {
 			return street_address + ", " + locality + ", " + region + " " + postal_code + ", " + country;
 		}
 		
+	}
+
+	public int getId() {
+		return id;
 	}
 }

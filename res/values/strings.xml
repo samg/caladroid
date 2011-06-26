@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, CaladroidActivity!</string>
     <string name="app_name">Calagator</string>
+    <string name="refresh">Reload Events</string>
+    <string name="share">Share</string>
 </resources>

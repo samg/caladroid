@@ -10,12 +10,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +36,26 @@ public class EventActivity extends MapActivity {
 	private double lng;
 	private Event event;
 	private Venue venue;
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.event_menu, menu);
+	    return true;
+	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.event_share:
+	    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("text/plain");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, event.title());
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, event.title() + " " + event.when() + " http://calagator.org/events/" + Integer.toString(event.getId()));
+	    	startActivity(emailIntent);
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
+
+	
 	public void callIntent(View view) {
 		Intent intent = null;
 		DecimalFormat df = new DecimalFormat("#.#######");
