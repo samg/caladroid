@@ -52,7 +52,7 @@
 
 						<Button android:id="@+id/Button01" android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:text="Map"
-							android:onClick="callIntent"></Button>
+							android:onClick="mapButton"></Button>
 					</LinearLayout>
 
 				</TableRow>

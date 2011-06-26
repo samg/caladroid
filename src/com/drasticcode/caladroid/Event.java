@@ -70,14 +70,12 @@ public class Event {
 	}
 
 	public String formattedStartTime() {
-		// Monday, June 20, 2011 from 9am–7pm
 		SimpleDateFormat writer = new SimpleDateFormat("ha");
 		String str = writer.format(start);
 		return str.toLowerCase();
 	}
 
 	public String formattedEndTime() {
-		// Monday, June 20, 2011 from 9am–7pm
 		SimpleDateFormat writer = new SimpleDateFormat("ha");
 		String str = writer.format(end);
 		return str.toLowerCase();
@@ -197,4 +195,9 @@ public class Event {
 	public int getId() {
 		return id;
 	}
+
+	public String shareString() {
+		return title() + "\n" + "http://calagator.org/events/" + Integer.toString(getId()) + "\n" + when();
+	}
+
 }

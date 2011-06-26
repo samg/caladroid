@@ -4,4 +4,5 @@
     <string name="app_name">Calagator</string>
     <string name="refresh">Reload Events</string>
     <string name="share">Share</string>
+    <string name="map">View Map</string>
 </resources>

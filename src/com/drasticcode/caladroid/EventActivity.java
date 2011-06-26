@@ -48,26 +48,33 @@ public class EventActivity extends MapActivity {
 	    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    	emailIntent.setType("text/plain");
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, event.title());
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, event.title() + " " + event.when() + " http://calagator.org/events/" + Integer.toString(event.getId()));
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, event.shareString());
 	    	startActivity(emailIntent);
+	    	return true;
+	    case R.id.event_map:
+	    	showMap();
+	    	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
 	}
 
 	
-	public void callIntent(View view) {
+	public void mapButton(View view) {
 		Intent intent = null;
-		DecimalFormat df = new DecimalFormat("#.#######");
 		switch (view.getId()) {
 		case R.id.Button01:
-			String uri = "geo:"+df.format(lat)+","+df.format(lng)+"?q="+venue.address()+"&z=19";
-			//System.out.println(uri);
-			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse(uri));
-			startActivity(intent);
+			showMap();
 			break;
 		}
+	}
+	private void showMap() {
+		Intent intent;
+		DecimalFormat df = new DecimalFormat("#.#######");
+		String uri = "geo:"+df.format(lat)+","+df.format(lng)+"?q="+venue.address()+"&z=19";
+		intent = new Intent(Intent.ACTION_VIEW,
+				Uri.parse(uri));
+		startActivity(intent);
 	}
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
