@@ -1,9 +1,13 @@
 package com.drasticcode.caladroid;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -14,12 +18,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -29,10 +29,9 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 	public String responseString;
 	public Activity mContext;
 	public Boolean error = false;
-
+	private SimpleDateFormat dateWriter = new SimpleDateFormat( "yyyy-MM-dd");
 
 	protected void onPostExecute(JsonArray result) {
-
 		if ( error ) {
 			mContext.setContentView(R.layout.error);
 		} else {
@@ -45,10 +44,80 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 	@Override
 	protected JsonArray doInBackground(String... params) {
 
-		SimpleDateFormat writer = new SimpleDateFormat( "yyyy-MM-dd");
+		Date lastCached = getlastCachedDate();
+		Date today = new Date();
+		
+		System.out.println(dateWriter.format(today));
+		System.out.println(dateWriter.format(lastCached));
+		if ( dateWriter.format(today).equals(dateWriter.format(lastCached))) {
+			loadEventsFromCache();
+		} else {
+			loadEventsFromWeb();
+		}
+
+		Gson gson = new Gson ();
+		JsonParser parser = new JsonParser();
+		JsonArray array = parser.parse(responseString).getAsJsonArray();
+		UpcomingActivity.events = array;
+		return array;
+	}
+
+	private boolean loadEventsFromCache() {
+		
+		try {
+			FileInputStream cachedResponseFh = mContext.openFileInput("events.json");
+			try {
+				StringBuffer strContent = new StringBuffer("");
+				int ch;
+				while( (ch = cachedResponseFh.read()) != -1)
+					strContent.append((char)ch);
+				responseString = new String(strContent);
+				return true;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			cachedResponseFh.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private Date getlastCachedDate() {
+		Date lastCached = new Date(0);
+		try {
+			FileInputStream fh = mContext.openFileInput("cached_at.txt");
+			try {
+				StringBuffer strContent = new StringBuffer("");
+				int ch;
+				while( (ch = fh.read()) != -1)
+					strContent.append((char)ch);
+				
+				lastCached = dateWriter.parse(new String(strContent));
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			fh.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lastCached;
+	}
+
+	private void loadEventsFromWeb() {
+		error = false;
 		Calendar c1 = Calendar.getInstance();
 		c1.add(Calendar.DATE,20);
-		String format = writer.format(c1.getTime());
+		String format = dateWriter.format(c1.getTime());
 		String uri = "http://calagator.org/events.json?date[end]=".concat(format);
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpResponse response;
@@ -67,17 +136,25 @@ public class LoadEvents extends AsyncTask<String, String, JsonArray> {
 			}
 		} catch (ClientProtocolException e) {
 			error = true;
-			return null;
 		} catch (IOException e) {
 			error = true;
-			return null;
 		}
-		Gson gson = new Gson ();
-		JsonParser parser = new JsonParser();
-		JsonArray array = parser.parse(responseString).getAsJsonArray();
-		UpcomingActivity.events = array;
 
-		return array;
+		saveResponseString();
+	}
+
+	private void saveResponseString() {
+		try {
+			FileOutputStream fh = mContext.openFileOutput("events.json", 0);
+			fh.write(responseString.getBytes());
+			fh.close();
+			FileOutputStream fh1 = mContext.openFileOutput("cached_at.txt", 0);
+			fh1.write(dateWriter.format(Calendar.getInstance().getTime()).getBytes());
+			fh1.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
 
