@@ -13,16 +13,21 @@ public class Event {
 	public Date start, end;
 	private int id;
 	private Venue venue;
+	
+	private String getStringAttribute(JsonObject json, String string) {
+		if (json != null && json.has(string)&& !json.get(string).isJsonNull()) {
+			return json.get(string).getAsString();
+		}
+		return "";
+	}
 	public Event(JsonObject json) {
 
 		title = json.get("title").getAsString();
-		start = parseDate(json.get("start_time").getAsString());
-		end = parseDate(json.get("end_time").getAsString());
+		start = parseDate(getStringAttribute(json, "start_time"));
+		end = parseDate(getStringAttribute(json, "end_time"));
 		id = json.get("id").getAsInt();
-		if ( json.has("url") ) {
-			website = json.get("url").getAsString();
-		}
-		description = json.get("description").getAsString();
+		website = getStringAttribute(json, "website");
+		description = getStringAttribute(json, "description");
 		JsonObject v = json.getAsJsonObject("venue");
 		setVenue(new Venue(v));
 	}
@@ -31,11 +36,7 @@ public class Event {
 		return title;
 	}
 	public String website() {
-		if ( website != null ){
-			return website;
-		} else {
-			return "";
-		}
+		return website;
 	}
 	public String description() {
 		return description;
@@ -130,21 +131,21 @@ public class Event {
 
 
 		private String getStringAttribute(String string) {
-			if (json.has(string)&& !json.get(string).isJsonNull()) {
+			if (json != null && json.has(string)&& !json.get(string).isJsonNull()) {
 				return json.get(string).getAsString();
 			}
 			return "";
 		}
 		
 		private Boolean getBooleanAttribute(String string) {
-			if (json.has(string)&& !json.get(string).isJsonNull()) {
+			if (json != null && json.has(string)&& !json.get(string).isJsonNull()) {
 				return json.get(string).getAsBoolean();
 			}
 			return false;
 		}
 		
 		private Double getDoubleAttribute(String string) {
-			if (json.has(string)&& !json.get(string).isJsonNull()) {
+			if (json != null && json.has(string)&& !json.get(string).isJsonNull()) {
 				return json.get(string).getAsDouble();
 			}
 			return -1.0;
